@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para ti</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #ffe6f2; /* Fondo rosa claro */
+            text-align: center;
+            overflow: hidden;
+        }
+        .container {
+            z-index: 10;
+        }
+        h1 {
+            font-size: 3em;
+            color: #ff3366; /* Rosa intenso */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .buttons {
+            margin-top: 30px;
+        }
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            margin: 0 15px;
+        }
+        #yes-btn {
+            background-color: #ff69b4; /* Rosa */
+            color: white;
+        }
+        #yes-btn:hover {
+            transform: scale(1.1);
+            background-color: #ff4d99;
+        }
+        #no-btn {
+            background-color: #d3d3d3; /* Gris claro */
+            color: #333;
+        }
+        #no-btn:hover {
+            transform: scale(1.1);
+            background-color: #b3b3b3;
+        }
+        /* Animaciones */
+        .hidden {
+            display: none;
+        }
+        .heart-animation {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #ff69b4;
+            transform: rotate(-45deg);
+            animation: float-up 3s forwards, fade-out 3s forwards;
+            z-index: 5;
+        }
+        .heart-animation:before, .heart-animation:after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #ff69b4;
+            border-radius: 50%;
+        }
+        .heart-animation:before {
+            top: -10px;
+            left: 0;
+        }
+        .heart-animation:after {
+            top: 0;
+            left: 10px;
+        }
+        @keyframes float-up {
+            0% { transform: translateY(0) rotate(-45deg); opacity: 1; }
+            100% { transform: translateY(-500px) rotate(-45deg); opacity: 0; }
+        }
+        @keyframes fade-out {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        /* Corazón roto */
+        .broken-heart-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            overflow: hidden;
+        }
+        .broken-heart {
+            width: 100px;
+            height: 100px;
+            background-color: #ff69b4;
+            transform: rotate(-45deg);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -50px;
+            margin-left: -50px;
+            z-index: 5;
+        }
+        .broken-heart::before, .broken-heart::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: #ff69b4;
+            border-radius: 50%;
+        }
+        .broken-heart::before {
+            top: -50px;
+            left: 0;
+        }
+        .broken-heart::after {
+            top: 0;
+            left: 50px;
+        }
+        .broken-heart-piece {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: #ff69b4;
+            animation: break-heart 1s forwards;
+        }
+        @keyframes break-heart {
+            to {
+                transform: scale(0.1);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="question">¿Quieres ser mi novia?</h1>
+        <div class="buttons">
+            <button id="yes-btn">Sí</button>
+            <button id="no-btn">No</button>
+        </div>
+    </div>
+    
+    <div id="animation-container" class="hidden">
+        </div>
+    
+    <div id="broken-heart-container" class="hidden">
+        <div class="broken-heart"></div>
+    </div>
+    
+    <script>
+        document.getElementById('yes-btn').addEventListener('click', function() {
+            const animationContainer = document.getElementById('animation-container');
+            animationContainer.classList.remove('hidden');
+
+            // Muestra un mensaje de "¡Sí!"
+            document.getElementById('question').textContent = "¡Sabía que dirías que sí! ¡Te quiero!";
+            document.querySelector('.buttons').style.display = 'none';
+
+            // Genera la animación de corazones
+            for (let i = 0; i < 50; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart-animation');
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.animationDuration = `${Math.random() * 2 + 3}s`;
+                animationContainer.appendChild(heart);
+            }
+        });
+
+        document.getElementById('no-btn').addEventListener('click', function() {
+            const brokenHeartContainer = document.getElementById('broken-heart-container');
+            brokenHeartContainer.classList.remove('hidden');
+            
+            // Muestra el mensaje de "No" y oculta los botones
+            document.getElementById('question').textContent = "💔";
+            document.querySelector('.buttons').style.display = 'none';
+            
+            // Anima el corazón roto
+            const brokenHeart = document.querySelector('.broken-heart');
+            brokenHeart.style.opacity = '0';
+            
+            // Crea fragmentos para la animación
+            const fragmentCount = 10;
+            for (let i = 0; i < fragmentCount; i++) {
+                const piece = document.createElement('div');
+                piece.classList.add('broken-heart-piece');
+                piece.style.top = `${Math.random() * 100}px`;
+                piece.style.left = `${Math.random() * 100}px`;
+                piece.style.transform = `rotate(${Math.random() * 360}deg) scale(1)`;
+                piece.style.animationDelay = `${i * 0.05}s`;
+                brokenHeartContainer.appendChild(piece);
+            }
+        });
+    </script>
+</body>
+</html>
